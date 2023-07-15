@@ -12,10 +12,10 @@ export async function getHotels(req: AuthenticatedRequest, res: Response) {
 
 export async function getHotelById(req: AuthenticatedRequest, res: Response) {
   const { userId } = req;
-  const { hotelIdReceived } = req.params;
-  const hotelId = parseInt(hotelIdReceived);
-  // if (isNaN(hotelId) || hotelId <= 0) return res.sendStatus(httpStatus.BAD_REQUEST);
-  const hotel = await hotelsService.getHotelById(userId, hotelId);
+  const { hotelId } = req.params;
+  const hotelIdNumber = parseInt(hotelId);
+  if (isNaN(hotelIdNumber) || hotelIdNumber <= 0) return res.sendStatus(httpStatus.BAD_REQUEST);
+  const hotel = await hotelsService.getHotelById(userId, hotelIdNumber);
 
   return res.status(httpStatus.OK).send(hotel);
 }

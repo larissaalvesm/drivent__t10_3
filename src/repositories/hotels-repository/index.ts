@@ -7,7 +7,7 @@ async function getHotels(): Promise<Hotel[]> {
 }
 
 async function getHotelRooms(hotelId: number) {
-  const hotel = prisma.hotel.findFirst({
+  return prisma.hotel.findFirst({
     where: {
       id: hotelId,
     },
@@ -15,9 +15,6 @@ async function getHotelRooms(hotelId: number) {
       Rooms: true,
     },
   });
-
-  console.log(hotel);
-  return hotel;
 }
 
 const hotelsRepository = { getHotels, getHotelRooms };

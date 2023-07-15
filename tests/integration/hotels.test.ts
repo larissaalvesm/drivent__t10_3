@@ -95,10 +95,31 @@ describe('GET /hotels', () => {
       expect(response.status).toEqual(httpStatus.NOT_FOUND);
     });
 
+    it('should respond with hotels when there are hotels created', async () => {
+      const user = await createUser();
+      const token = await generateValidToken(user);
+      const enrollment = await createEnrollmentWithAddress(user);
+      const ticketType = await createDefinedTicketType(false, true);
+      await createTicket(enrollment.id, ticketType.id, 'PAID');
+      await createHotel();
+
+      const response = await server.get('/hotels').set('Authorization', `Bearer ${token}`);
+
+      expect(response.status).toBe(httpStatus.OK);
+      expect(response.body).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+          id: expect.any(Number),
+          name: expect.any(String),
+          image: expect.any(String),
+          createdAt: expect.any(String),
+          updatedAt: expect.any(String),
+        }),
+      ])
+      );
+    });
+
   });
-});
-beforeEach(async () => {
-  await cleanDb();
 });
 
 describe('GET /hotels/:hotelId', () => {
